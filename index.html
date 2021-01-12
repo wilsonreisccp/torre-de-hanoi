@@ -7,12 +7,15 @@
     #torre2,
     #torre3 {
       width: 90px;
-      height: 200px;
+      height: 300px;
       margin: 50px;
       padding: 10px;
     }
 
-    .content {
+    .content,
+    .torre1,
+    .torre2,
+    .torre3 {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -31,34 +34,42 @@
 </head>
 
 <body>
-  <button onclick="torre()">TESTE</button>
+  <button onclick="refazTorre('torre3')">TESTE</button>
 
-  <h2>Drag and Drop</h2>
-  <p>Drag the image back and forth between the two div elements.</p>
+  <h2>Torre de Hanói</h2>
+  <p>By Wilson Reis and Guilherme Matos</p>
 
   <div class="inicial">
-    <div id="torre1" class="content" ondrop="drop(event)" ondragover="allowDrop(event)">
-      <p draggable="true" ondragstart="drag(event)" class="1" id="1">verde</p>
-      <p draggable="true" ondragstart="drag(event)" class="2" id="2">azul</p>
-      <p draggable="true" ondragstart="drag(event)" class="3" id="3">amarelo</p>
+    <div id="torre1" class="torre1" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <p draggable="true" ondragstart="drag(event)" class="1" id="1">1</p>
+      <p ondragstart="drag(event)" class="2" id="2">2</p>
+      <p ondragstart="drag(event)" class="3" id="3">3</p>
+      <p ondragstart="drag(event)" class="4" id="4">4</p>
+      <!----
+        
+      <p draggable="false" ondragstart="drag(event)" class="5" id="5">5</p>
+      <p draggable="false" ondragstart="drag(event)" class="6" id="6">6</p>
+      -->
+      
     </div>
 
-    <div id="torre2" class="content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="torre2" class="torre2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
 
-    <div id="torre3" class="content" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <div id="torre3" class="torre3" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
   </div>
 </body>
 
 <script>
   let valor, mov;
-  let t1 = new Array();
-  let t2 = new Array();
-  let t3 = new Array();
+  let p = [0, '']
+  let t1 = []
+  let t2 = []
+  let t3 = []
 
   var torre1 = document.getElementById("torre1").childNodes;
   var torre2 = document.getElementById("torre2").childNodes;
   var torre3 = document.getElementById("torre3").childNodes;
-  torre();
+  torreInit();
 
   function allowDrop(ev) {
     ev.preventDefault();
@@ -67,20 +78,83 @@
   function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
     mov = ev.target.id
-    console.log(mov)
+
+    p[1] = ev.target.id
+    p[0] = document.getElementById(p[1]).parentNode.className;
+
+    switch (p[0]) {
+      case "torre1":
+        t1.shift()
+        break;
+
+      case "torre2":
+        t2.shift()
+        break;
+
+      case "torre3":
+        t3.shift()
+        break;
+
+      default:
+        break;
+    }
+
+    torre()
   }
 
   function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
+
     ev.target.appendChild(document.getElementById(data));
+
+    let alvo
+
+    if (document.getElementById(p[1]).parentNode.className == "torre1") {
+      alvo = 1
+    } else {
+      if (document.getElementById(p[1]).parentNode.className == "torre2") {
+        alvo = 2
+      } else {
+        alvo = 3
+      }
+    }
+
+    console.log("drop---------------------")
+
+    switch (alvo) {
+      case 1:
+
+        t1.unshift(p[1])
+        break;
+
+      case 2:
+        t2.unshift(p[1])
+        break;
+
+      case 3:
+        t3.unshift(p[1])
+        break;
+
+      default:
+        break;
+    }
+    let t = "torre" + alvo
+    refazTorre(t)
+    refazTorre(p[0])
 
     torre();
   }
 
   function torre() {
 
-    for (var i = 0; i < 10; i++) {
+    console.log(t1)
+    console.log(t2)
+    console.log(t3)
+  }
+
+  function torreInit() {
+    for (var i = 1; i < 12; i++) {
       if (torre1[i]) {
         torre1[i].className == undefined ? '' : t1.push(torre1[i].className)
       }
@@ -93,11 +167,63 @@
         torre3[i].className == undefined ? '' : t3.push(torre3[i].className)
       }
     }
-
-    console.log(t1)
-    console.log(t2)
-    console.log(t3)
   }
+
+  function clearTorre(torre) {
+    var list = document.getElementById(torre);
+
+    while (list.hasChildNodes()) {
+      list.removeChild(list.firstChild);
+    }
+  }
+
+  function refazTorre(torre) {
+    //var t = document.getElementById(torre);
+    clearTorre(torre);
+    let str = ''
+
+    switch (torre) {
+      case "torre1":
+        for (let index = 0; index < t1.length; index++) {
+          
+          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+                    +' ondragstart="drag(event)"'
+                    +' class="'+ t1[index] +'"'
+                    +' id="'+ t1[index] +'">'
+                    + t1[index]
+                    +'</p>';
+        }
+        break;
+
+      case "torre2":
+        for (let index = 0; index < t2.length; index++) {
+          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+                    +' ondragstart="drag(event)"'
+                    +' class="'+ t2[index] +'"'
+                    +' id="'+ t2[index] +'">'
+                    + t2[index]
+                    +'</p>';
+        }
+        break;
+
+      case "torre3":
+        for (let index = 0; index < t3.length; index++) {
+          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+                    +' ondragstart="drag(event)"'
+                    +' class="'+ t3[index] +'"'
+                    +' id="'+ t3[index] +'">'
+                    + t3[index]
+                    +'</p>';
+        }
+        break;
+
+      default:
+        break;
+    }    
+    document.getElementById(torre).innerHTML = str;
+
+  }
+
 </script>
 
 </html>
