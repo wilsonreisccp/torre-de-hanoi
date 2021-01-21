@@ -72,11 +72,11 @@
   <div class="inicial">
     <div id="torre1" class="torre1" ondrop="drop(event)" ondragover="allowDrop(event)">
       <div draggable="true" ondragstart="drag(event)" class="a1" id="1"></div>
-      <div ondragstart="drag(event)" class="a2" id="2"></div>
-      <div ondragstart="drag(event)" class="a3" id="3"></div>
-      <div ondragstart="drag(event)" class="a4" id="4"></div>
-      <div draggable="false" ondragstart="drag(event)" class="a5" id="5"></div>
-      <div draggable="false" ondragstart="drag(event)" class="a6" id="6"></div>
+      <div class="a2" id="2"></div>
+      <div class="a3" id="3"></div>
+      <div class="a4" id="4"></div>
+      <div class="a5" id="5"></div>
+      <div class="a6" id="6"></div>
     </div>
 
     <div id="torre2" class="torre2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -246,8 +246,7 @@
       case "torre1":
         for (let index = 0; index < t1.length; index++) {
           
-          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
-                    +' ondragstart="drag(event)"'
+          str = str + '<div ' + (index == 0 ? "draggable='true' ondragstart='drag(event)'":"")
                     +' class="'+ t1[index] +'"'
                     +' id="'+ t1[index].substring(1, 2) +'">'
                     +'</div>';
@@ -256,8 +255,7 @@
 
       case "torre2":
         for (let index = 0; index < t2.length; index++) {
-          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
-                    +' ondragstart="drag(event)"'
+          str = str + '<div ' + (index == 0 ? "draggable='true' ondragstart='drag(event)'": "")
                     +' class="'+ t2[index] +'"'
                     +' id="'+ t2[index].substring(1, 2) +'">'
                     +'</div>';
@@ -266,8 +264,7 @@
 
       case "torre3":
         for (let index = 0; index < t3.length; index++) {
-          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
-                    +' ondragstart="drag(event)"'
+          str = str + '<div ' + (index == 0 ? "draggable='true' ondragstart='drag(event)'":"")
                     +' class="'+ t3[index] +'"'
                     +' id="'+ t3[index].substring(1, 2) +'">'
                     +'</div>';
