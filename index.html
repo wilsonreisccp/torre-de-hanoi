@@ -6,10 +6,10 @@
     #torre1,
     #torre2,
     #torre3 {
-      width: 90px;
-      height: 300px;
-      margin: 50px;
-      padding: 10px;
+      width: 94px;
+      height: 150px;
+      margin: 2px;
+      padding: 2px 2px 0 2px;
     }
 
     .content,
@@ -18,39 +18,65 @@
     .torre3 {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      justify-content: flex-end;
       border: 1px solid;
+      background-image: url(./aneis/torre.fw.png);
     }
 
     .inicial {
       display: flex;
       flex-direction: row;
-      align-items: flex-start;
-      border: 1px solid;
     }
+
+    .a1, .a2, .a3, .a4, .a5, .a6 {
+      align-items: flex-end;
+      text-align: center;
+      width: 100%;
+      height: 18px;
+      background-repeat: no-repeat;
+    }
+
+    .a1 {
+      background-image: url(./aneis/1.fw.png);
+    }
+
+    .a2 {
+      background-image: url(./aneis/2.fw.png);
+    }
+
+    .a3 {
+      background-image: url(./aneis/3.fw.png);
+    }
+
+    .a4 {
+      background-image: url(./aneis/4.fw.png);
+    }
+
+    .a5 {
+      background-image: url(./aneis/5.fw.png);
+    }
+
+    .a6 {
+      background-image: url(./aneis/6.fw.png); 
+    }
+
   </style>
 
 
 </head>
 
 <body>
-  <button onclick="refazTorre('torre3')">TESTE</button>
-
   <h2>Torre de Hanói</h2>
   <p>By Wilson Reis and Guilherme Matos</p>
 
   <div class="inicial">
     <div id="torre1" class="torre1" ondrop="drop(event)" ondragover="allowDrop(event)">
-      <p draggable="true" ondragstart="drag(event)" class="1" id="1">1</p>
-      <p ondragstart="drag(event)" class="2" id="2">2</p>
-      <p ondragstart="drag(event)" class="3" id="3">3</p>
-      <p ondragstart="drag(event)" class="4" id="4">4</p>
-      <!----
-        
-      <p draggable="false" ondragstart="drag(event)" class="5" id="5">5</p>
-      <p draggable="false" ondragstart="drag(event)" class="6" id="6">6</p>
-      -->
-      
+      <div draggable="true" ondragstart="drag(event)" class="a1" id="1"></div>
+      <div ondragstart="drag(event)" class="a2" id="2"></div>
+      <div ondragstart="drag(event)" class="a3" id="3"></div>
+      <div ondragstart="drag(event)" class="a4" id="4"></div>
+      <div draggable="false" ondragstart="drag(event)" class="a5" id="5"></div>
+      <div draggable="false" ondragstart="drag(event)" class="a6" id="6"></div>
     </div>
 
     <div id="torre2" class="torre2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -82,6 +108,17 @@
     p[1] = ev.target.id
     p[0] = document.getElementById(p[1]).parentNode.className;
 
+    torre()
+  }
+
+  function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+
+    ev.target.appendChild(document.getElementById(data));
+
+    let alvo
+
     switch (p[0]) {
       case "torre1":
         t1.shift()
@@ -99,55 +136,78 @@
         break;
     }
 
-    torre()
-  }
-
-  function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-
-    ev.target.appendChild(document.getElementById(data));
-
-    let alvo
-
+    // verifica se movimentou e voltou para mesma torre
     if (document.getElementById(p[1]).parentNode.className == "torre1") {
       alvo = 1
+      if (p[0] == 'torre1') {
+        console.log("mesma torre" + alvo + "-----" + p[1])
+        t1.unshift("a" + (p[1]))
+        refazTorre(p[0])
+        return
+      }
     } else {
       if (document.getElementById(p[1]).parentNode.className == "torre2") {
         alvo = 2
+        if (p[0] == 'torre2') {
+          console.log("mesma torre" + alvo)
+          t2.unshift("a" + (p[1]))
+          refazTorre(p[0])
+          return
+        }
       } else {
         alvo = 3
+        if (p[0] == 'torre3') {
+          console.log("mesma torre" + alvo)
+          t3.unshift("a" + (p[1]))
+          refazTorre(p[0])
+          return
+        }
       }
     }
 
     console.log("drop---------------------")
-
     switch (alvo) {
       case 1:
-
-        t1.unshift(p[1])
+        if (t1.length==0 || parseInt(t1[0].substring(1, 2)) > parseInt(p[1])) {
+          console.log('entrada------')
+          t1.unshift("a" + (p[1]))
+        }else{
+          console.log('volta de onde veio------')
+          p[0]=='torre2'?t2.unshift("a" + p[1]) : t3.unshift("a" + p[1])
+        }        
         break;
 
       case 2:
-        t2.unshift(p[1])
+        //se estiver vazio pode colocar senão verifica verifica o primeiro do array (se for maior que o que esta entrando, pode colocar)
+        if (t2.length==0 || parseInt(t2[0].substring(1, 2))>parseInt(p[1])) {
+          console.log('entrada------')
+          t2.unshift("a" + (p[1]))
+        }else{
+          console.log('volta de onde veio------')
+          p[0]=='torre1'?t1.unshift("a" + (p[1])) : t3.unshift("a" + (p[1]))
+        }        
         break;
 
       case 3:
-        t3.unshift(p[1])
+        if (t3.length==0 || parseInt(t3[0].substring(1, 2))>parseInt(p[1])) {
+          t3.unshift("a" + p[1])
+        }else{
+          console.log('volta de onde veio------')
+          p[0]=='torre1'?t1.unshift("a" + (p[1])) : t2.unshift("a" + (p[1]))
+        }        
         break;
 
       default:
         break;
     }
     let t = "torre" + alvo
-    refazTorre(t)
+    refazTorre("torre" + alvo)
     refazTorre(p[0])
 
     torre();
   }
 
   function torre() {
-
     console.log(t1)
     console.log(t2)
     console.log(t3)
@@ -186,34 +246,31 @@
       case "torre1":
         for (let index = 0; index < t1.length; index++) {
           
-          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
                     +' ondragstart="drag(event)"'
                     +' class="'+ t1[index] +'"'
-                    +' id="'+ t1[index] +'">'
-                    + t1[index]
-                    +'</p>';
+                    +' id="'+ t1[index].substring(1, 2) +'">'
+                    +'</div>';
         }
         break;
 
       case "torre2":
         for (let index = 0; index < t2.length; index++) {
-          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
                     +' ondragstart="drag(event)"'
                     +' class="'+ t2[index] +'"'
-                    +' id="'+ t2[index] +'">'
-                    + t2[index]
-                    +'</p>';
+                    +' id="'+ t2[index].substring(1, 2) +'">'
+                    +'</div>';
         }
         break;
 
       case "torre3":
         for (let index = 0; index < t3.length; index++) {
-          str = str + '<p ' + (index == 0 ? "draggable='true'":"")
+          str = str + '<div ' + (index == 0 ? "draggable='true'":"")
                     +' ondragstart="drag(event)"'
                     +' class="'+ t3[index] +'"'
-                    +' id="'+ t3[index] +'">'
-                    + t3[index]
-                    +'</p>';
+                    +' id="'+ t3[index].substring(1, 2) +'">'
+                    +'</div>';
         }
         break;
 
