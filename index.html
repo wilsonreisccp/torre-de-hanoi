@@ -68,6 +68,7 @@
 <body>
   <h2>Torre de Hanói</h2>
   <p>By Wilson Reis and Guilherme Matos</p>
+  <p>Movimentos: <strong id="contador">0</strong> </p>
 
   <div class="inicial">
     <div id="torre1" class="torre1" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -91,10 +92,12 @@
   let t1 = []
   let t2 = []
   let t3 = []
+  let contador = 0
 
   var torre1 = document.getElementById("torre1").childNodes;
   var torre2 = document.getElementById("torre2").childNodes;
   var torre3 = document.getElementById("torre3").childNodes;
+
   torreInit();
 
   function allowDrop(ev) {
@@ -107,6 +110,7 @@
 
     p[1] = ev.target.id
     p[0] = document.getElementById(p[1]).parentNode.className;
+    contador ++
 
     torre()
   }
@@ -238,7 +242,9 @@
   }
 
   function refazTorre(torre) {
-    //var t = document.getElementById(torre);
+    let cont = document.getElementById("contador");
+    document.getElementById("contador").innerHTML = contador;
+
     clearTorre(torre);
     let str = ''
 
