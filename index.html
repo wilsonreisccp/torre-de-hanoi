@@ -110,7 +110,10 @@
 
     p[1] = ev.target.id
     p[0] = document.getElementById(p[1]).parentNode.className;
+    
     contador ++
+    let cont = document.getElementById("contador");
+    document.getElementById("contador").innerHTML = contador;
 
     torre()
   }
@@ -242,9 +245,6 @@
   }
 
   function refazTorre(torre) {
-    let cont = document.getElementById("contador");
-    document.getElementById("contador").innerHTML = contador;
-
     clearTorre(torre);
     let str = ''
 
